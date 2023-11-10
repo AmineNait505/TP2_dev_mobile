@@ -1,4 +1,4 @@
-package com.example.nait_slimene_amine_tp2;
+package com.example.nait_slimene_amine_tp2.vue;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,6 +11,9 @@ import android.widget.RadioButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.nait_slimene_amine_tp2.R;
+import com.example.nait_slimene_amine_tp2.model.Patient;
 
 public class MainActivity extends AppCompatActivity {
     private TextView txt;
@@ -33,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
         btnConsulter = findViewById(R.id.btnConsulter);
         sbAge = findViewById(R.id.sbAge);
         txt=findViewById(R.id.txt);
+
+       // Patient p =new Patient(Float.parseFloat(edtxt.toString()),yes.isChecked(),sbAge.getProgress());
         sbAge.setOnSeekBarChangeListener(new
                                                    SeekBar.OnSeekBarChangeListener() {
                                                        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -45,7 +50,8 @@ public class MainActivity extends AppCompatActivity {
                                                        }
 
                                                    });
-            btnConsulter.setOnClickListener(new View.OnClickListener(){
+
+           btnConsulter.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view) {
                     int age=sbAge.getProgress();
@@ -104,7 +110,6 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         if (valmesure < 10.5) {
                             outputTextView.setText("Niveau de glycémie est normale");
-
                             System.out.println("Niveau de glycémie est normale");
                         } else {
                             outputTextView.setText("Niveau de glycémie est trop bas");
@@ -112,7 +117,74 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }}});
-    }}
+        /*public void calculer(View view){
+            int age=sbAge.getProgress();
+            System.out.println("age ="+age);
+            String valmesurestr=(edtxt.getText().toString());
+            if(age==0 && valmesurestr.isEmpty()){
+                Toast.makeText(getApplicationContext(), "Age and valeur mesure invalide", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            else if (age==0) {
+                Toast.makeText(getApplicationContext(), "age invalide", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            else if (valmesurestr.isEmpty() ) {
+                Toast.makeText(getApplicationContext(), " valeur mesure invalide", Toast.LENGTH_SHORT).show();
+                return;
+            }else {
+                float valmesure=Float.parseFloat(valmesurestr);
+
+                System.out.println("val ="+valmesure);
+                boolean isFasting=yes.isChecked();
+                TextView outputTextView = findViewById(R.id.outputText);
+                System.out.println("isFasting? ="+ isFasting);
+
+                if (isFasting) {
+                    if (age > 13) {
+                        if (valmesure >= 5.0 && valmesure <= 7.2) {
+                            outputTextView.setText("Niveau de glycémie est normale");
+                            System.out.println("Niveau de glycémie est normale");
+                        } else if (valmesure < 5.0) {
+                            outputTextView.setText("Niveau de glycémie est trop bas");
+
+                            System.out.println("Niveau de glycémie est trop bas");
+                        } else if (valmesure > 7.2) {
+                            outputTextView.setText("Niveau de glycémie trop élevée");
+                            System.out.println("Niveau de glycémie est trop élevée");
+                        }
+                    } else if (age >= 6 && age <= 12) {
+                        if (valmesure >= 5.0 && valmesure <= 10.0) {
+                            outputTextView.setText("Niveau de glycémie est normale");
+                            System.out.println("Niveau de glycémie est normale");
+                        } else {
+                            outputTextView.setText("Niveau de glycémie est trop bas");
+                            System.out.println("Niveau de glycémie est trop bas");
+                        }
+                    } else if (age < 6) {
+                        if (valmesure >= 5.5 && valmesure <= 10.0) {
+                            outputTextView.setText("Niveau de glycémie est normale");
+
+                            System.out.println("Niveau de glycémie est normale");
+                        } else {
+                            outputTextView.setText("Niveau de glycémie est trop bas");
+                            System.out.println("Niveau de glycémie est trop bas");
+                        }
+                    }
+                } else {
+                    if (valmesure < 10.5) {
+                        outputTextView.setText("Niveau de glycémie est normale");
+                        System.out.println("Niveau de glycémie est normale");
+                    } else {
+                        outputTextView.setText("Niveau de glycémie est trop bas");
+                        System.out.println("Niveau de glycémie est trop élevée");
+                    }
+                }
+            }}*/
+    }
+}
+
+
 
 
 
