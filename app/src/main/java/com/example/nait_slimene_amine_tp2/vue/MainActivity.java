@@ -1,5 +1,6 @@
 package com.example.nait_slimene_amine_tp2.vue;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -13,185 +14,76 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.nait_slimene_amine_tp2.R;
-import com.example.nait_slimene_amine_tp2.model.Patient;
+import com.example.nait_slimene_amine_tp2.controller.Controller;
 
 public class MainActivity extends AppCompatActivity {
+    private EditText value;
+    private RadioButton rbtOui;
+    private RadioButton rbtNon;
+    private SeekBar seekBar;
+    private Button btn;
+
     private TextView txt;
-    private EditText edtxt;
-    private RadioButton no;
-    private RadioButton yes;
-    private Button btnConsulter;
-    private SeekBar sbAge;
+    private TextView txtshow;
+
+    private Controller controller; // Ajouter une instance de la classe Controller.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
+        // Initialisez l'instance de Controller.
+        controller = new Controller();
     }
+
     private void init() {
-        edtxt = findViewById(R.id.edtxt);
-        no = findViewById(R.id.no);
-        yes = findViewById(R.id.yes);
-        btnConsulter = findViewById(R.id.btnConsulter);
-        sbAge = findViewById(R.id.sbAge);
-        txt=findViewById(R.id.txt);
+        value = findViewById(R.id.edtxt);
+        rbtOui = findViewById(R.id.yes);
+        rbtNon = findViewById(R.id.no);
+        seekBar = findViewById(R.id.sbAge);
+        btn = findViewById(R.id.btnConsulter);
+        txt = findViewById(R.id.txt);
+        txtshow = findViewById(R.id.outputText);
 
-       // Patient p =new Patient(Float.parseFloat(edtxt.toString()),yes.isChecked(),sbAge.getProgress());
-        sbAge.setOnSeekBarChangeListener(new
-                                                   SeekBar.OnSeekBarChangeListener() {
-                                                       public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                                                           Log.i("Information", "onProgressChanged " + progress);
-                                                           txt.setText("Votre Age:"+progress);
-                                                       }
-                                                       public void onStartTrackingTouch(SeekBar seekBar) {
-                                                       }
-                                                       public void onStopTrackingTouch(SeekBar seekBar) {
-                                                       }
-
-                                                   });
-
-           btnConsulter.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View view) {
-                    int age=sbAge.getProgress();
-                    System.out.println("age ="+age);
-                    String valmesurestr=(edtxt.getText().toString());
-                    if(age==0 && valmesurestr.isEmpty()){
-                        Toast.makeText(getApplicationContext(), "Age and valeur mesure invalide", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    else if (age==0) {
-                        Toast.makeText(getApplicationContext(), "age invalide", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    else if (valmesurestr.isEmpty() ) {
-                        Toast.makeText(getApplicationContext(), " valeur mesure invalide", Toast.LENGTH_SHORT).show();
-                        return;
-                    }else {
-                    float valmesure=Float.parseFloat(valmesurestr);
-
-                    System.out.println("val ="+valmesure);
-                    boolean isFasting=yes.isChecked();
-                    TextView outputTextView = findViewById(R.id.outputText);
-                    System.out.println("isFasting? ="+ isFasting);
-
-                    if (isFasting) {
-                        if (age > 13) {
-                            if (valmesure >= 5.0 && valmesure <= 7.2) {
-                                outputTextView.setText("Niveau de glycémie est normale");
-                                System.out.println("Niveau de glycémie est normale");
-                            } else if (valmesure < 5.0) {
-                                outputTextView.setText("Niveau de glycémie est trop bas");
-
-                                System.out.println("Niveau de glycémie est trop bas");
-                            } else if (valmesure > 7.2) {
-                                outputTextView.setText("Niveau de glycémie trop élevée");
-                                System.out.println("Niveau de glycémie est trop élevée");
-                            }
-                        } else if (age >= 6 && age <= 12) {
-                            if (valmesure >= 5.0 && valmesure <= 10.0) {
-                                outputTextView.setText("Niveau de glycémie est normale");
-                                System.out.println("Niveau de glycémie est normale");
-                            } else {
-                                outputTextView.setText("Niveau de glycémie est trop bas");
-                                System.out.println("Niveau de glycémie est trop bas");
-                            }
-                        } else if (age < 6) {
-                            if (valmesure >= 5.5 && valmesure <= 10.0) {
-                                outputTextView.setText("Niveau de glycémie est normale");
-
-                                System.out.println("Niveau de glycémie est normale");
-                            } else {
-                                outputTextView.setText("Niveau de glycémie est trop bas");
-                                System.out.println("Niveau de glycémie est trop bas");
-                            }
-                        }
-                    } else {
-                        if (valmesure < 10.5) {
-                            outputTextView.setText("Niveau de glycémie est normale");
-                            System.out.println("Niveau de glycémie est normale");
-                        } else {
-                            outputTextView.setText("Niveau de glycémie est trop bas");
-                            System.out.println("Niveau de glycémie est trop élevée");
-                        }
-                    }
-                }}});
-        /*public void calculer(View view){
-            int age=sbAge.getProgress();
-            System.out.println("age ="+age);
-            String valmesurestr=(edtxt.getText().toString());
-            if(age==0 && valmesurestr.isEmpty()){
-                Toast.makeText(getApplicationContext(), "Age and valeur mesure invalide", Toast.LENGTH_SHORT).show();
-                return;
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                Log.i("Information", "onProgressChanged " + progress);
+                txt.setText("Votre âge : " + progress);
             }
-            else if (age==0) {
-                Toast.makeText(getApplicationContext(), "age invalide", Toast.LENGTH_SHORT).show();
-                return;
+
+            public void onStartTrackingTouch(SeekBar seekBar) {
             }
-            else if (valmesurestr.isEmpty() ) {
-                Toast.makeText(getApplicationContext(), " valeur mesure invalide", Toast.LENGTH_SHORT).show();
-                return;
-            }else {
-                float valmesure=Float.parseFloat(valmesurestr);
 
-                System.out.println("val ="+valmesure);
-                boolean isFasting=yes.isChecked();
-                TextView outputTextView = findViewById(R.id.outputText);
-                System.out.println("isFasting? ="+ isFasting);
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-                if (isFasting) {
-                    if (age > 13) {
-                        if (valmesure >= 5.0 && valmesure <= 7.2) {
-                            outputTextView.setText("Niveau de glycémie est normale");
-                            System.out.println("Niveau de glycémie est normale");
-                        } else if (valmesure < 5.0) {
-                            outputTextView.setText("Niveau de glycémie est trop bas");
+                int age = seekBar.getProgress();
+                String glucose = value.getText().toString();
+                boolean isFasting = rbtOui.isChecked();
 
-                            System.out.println("Niveau de glycémie est trop bas");
-                        } else if (valmesure > 7.2) {
-                            outputTextView.setText("Niveau de glycémie trop élevée");
-                            System.out.println("Niveau de glycémie est trop élevée");
-                        }
-                    } else if (age >= 6 && age <= 12) {
-                        if (valmesure >= 5.0 && valmesure <= 10.0) {
-                            outputTextView.setText("Niveau de glycémie est normale");
-                            System.out.println("Niveau de glycémie est normale");
-                        } else {
-                            outputTextView.setText("Niveau de glycémie est trop bas");
-                            System.out.println("Niveau de glycémie est trop bas");
-                        }
-                    } else if (age < 6) {
-                        if (valmesure >= 5.5 && valmesure <= 10.0) {
-                            outputTextView.setText("Niveau de glycémie est normale");
-
-                            System.out.println("Niveau de glycémie est normale");
-                        } else {
-                            outputTextView.setText("Niveau de glycémie est trop bas");
-                            System.out.println("Niveau de glycémie est trop bas");
-                        }
-                    }
+                if (age == 0 && glucose.isEmpty()){
+                    Toast.makeText(getApplicationContext(), "Please enter a valid age and value", Toast.LENGTH_SHORT).show();
+                }else if (age == 0) {
+                    Toast.makeText(getApplicationContext(), "Please enter a valid age", Toast.LENGTH_SHORT).show();
+                } else if (glucose.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Please enter a valid value", Toast.LENGTH_SHORT).show();
                 } else {
-                    if (valmesure < 10.5) {
-                        outputTextView.setText("Niveau de glycémie est normale");
-                        System.out.println("Niveau de glycémie est normale");
-                    } else {
-                        outputTextView.setText("Niveau de glycémie est trop bas");
-                        System.out.println("Niveau de glycémie est trop élevée");
-                    }
+                    // Appelez la méthode createPatient() du Controller pour initialiser le modèle.
+                    float glucoseValue = Float.parseFloat(value.getText().toString());
+                    controller.createPatient(age,glucoseValue, isFasting);
+
+                    // Obtenez la réponse en appelant la méthode getResponse() du Controller.
+                    String response = controller.getResponse();
+
+                    // Affichez la réponse dans le TextView approprié.
+                    txtshow.setText(response);
                 }
-            }}*/
+            }
+        });
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
