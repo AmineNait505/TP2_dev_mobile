@@ -3,6 +3,7 @@ package com.example.nait_slimene_amine_tp2.vue;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         seekBar = findViewById(R.id.sbAge);
         btn = findViewById(R.id.btnConsulter);
         txt = findViewById(R.id.txt);
-        txtshow = findViewById(R.id.outputText);
+
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -81,7 +82,9 @@ public class MainActivity extends AppCompatActivity {
                     String response = controller.getResponse();
 
                     // Affichez la réponse dans le TextView approprié.
-                    txtshow.setText(response);
+                    Intent intent =new Intent(MainActivity.this ,ConsultActivity.class);
+                    intent.putExtra("response",controller.getResponse());
+                    startActivityForResult(intent,1);
                 }
             }
         });
